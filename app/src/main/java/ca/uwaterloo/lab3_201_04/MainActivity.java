@@ -20,6 +20,9 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
     LineGraphView graph1, graph2;
     int stepCount = 0;
+    boolean stepCheckEnabled = true;
+    double stepNorth, stepEast;
+    stepNorth = stepEast = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
