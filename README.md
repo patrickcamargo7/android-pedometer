@@ -11,9 +11,11 @@
 
 - [ ] Pedometer: steps taken
 - [ ] Orientation: direction of steps
-- [ ] Map
-- [ ] Reset button
-- [ ] Calibration button/popup - disables steps
+  - [ ] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
+  - [ ] Smooth the sensors
+- [ ] Map - *Tian*
+- [ ] Reset button - *Tian*
+- [ ] Calibration button/popup - disables steps - *Tian*
 
 ### Implementation:
 - Step detection code will be carried over from previous lab
