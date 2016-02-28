@@ -14,3 +14,10 @@
 - [ ] Map
 - [ ] Reset button
 - [ ] Calibration button/popup - disables steps
+
+### Implementation:
+- Step detection code will be carried over from previous lab
+- Each time step is updated a method will be called to update the North and East components of the step, from sin(theta) and cos(theta), theta value obtained from orientation sensor
+- ## Buttons:
+  - reset: changes all steps to 0
+  - calibration: disables step registering, show popup dialog to rotate phone
