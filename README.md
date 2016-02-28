@@ -11,7 +11,7 @@
 
 - [ ] Pedometer: steps taken - *Pierre*
 - [ ] Orientation: direction of steps
-  - [ ] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
+  - [x] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
   - [ ] Smooth the sensors - *Pierre*
 - [ ] Map - *Tian*
 - [ ] Reset button - *Tian*
