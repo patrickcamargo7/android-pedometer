@@ -13,7 +13,4 @@
 - [ ] Orientation: direction of steps
 - [ ] Map
 - [ ] Reset button
-
-#### Optional:
-
-- [ ] Possible calibration button - disables steps
+- [ ] Calibration button/popup - disables steps
