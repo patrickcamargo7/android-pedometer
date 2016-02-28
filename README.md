@@ -9,10 +9,10 @@
 
 ### Components/Checklist:
 
-- [ ] Pedometer: steps taken
+- [ ] Pedometer: steps taken - *Pierre*
 - [ ] Orientation: direction of steps
   - [ ] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
-  - [ ] Smooth the sensors
+  - [ ] Smooth the sensors - *Pierre*
 - [ ] Map - *Tian*
 - [ ] Reset button - *Tian*
 - [ ] Calibration button/popup - disables steps - *Tian*
