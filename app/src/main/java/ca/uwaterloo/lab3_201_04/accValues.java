@@ -53,7 +53,7 @@ public class accValues {
     static void flipState(float f) {
         if (f < resetAmplitude) state = 0;
         if (f > maxAmplitude) state = 2;
-        if (f > minAmplitude && f < maxAmplitude && f != 2) state = 1;
+        if (f > minAmplitude && f < maxAmplitude && state != 2) state = 1;
         if (f > 0) sign = 1;
         if (sign == 1 && f < 0) sign = -2;
         else if ( f < 0 ) sign = -1;

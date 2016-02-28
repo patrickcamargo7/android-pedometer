@@ -19,6 +19,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
     LineGraphView graph;
     int stepCount = 0;
+    boolean stepCheckEnabled = true;
     float stepCountNorth = 0; // TODO: Use the stepCountNorth/East variables.
     float stepCountEast = 0;
 

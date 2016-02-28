@@ -9,11 +9,18 @@
 
 ### Components/Checklist:
 
-- [ ] Pedometer: steps taken
+- [ ] Pedometer: steps taken - *Pierre*
 - [ ] Orientation: direction of steps
-- [ ] Map
-- [ ] Reset button
+  - [ ] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
+  - [ ] Smooth the sensors - *Pierre*
+- [ ] Map - *Tian*
+- [ ] Reset button - *Tian*
+- [ ] Calibration button/popup - disables steps - *Tian*
 
-#### Optional:
+### Implementation:
+- Step detection code will be carried over from previous lab
+- Each time step is updated a method will be called to update the North and East components of the step, from sin(theta) and cos(theta), theta value obtained from orientation sensor
 
-- [ ] Possible calibration button - disables steps
+## Buttons:
+  - reset: changes all steps to 0
+  - calibration: disables step registering, show popup dialog to rotate phone
