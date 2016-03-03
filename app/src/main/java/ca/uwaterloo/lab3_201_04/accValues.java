@@ -7,9 +7,10 @@ import java.util.Deque;
 import java.util.Iterator;
 
 public class accValues {
+    //initializing point arrays
     static Deque<Float> pointsZ = new ArrayDeque<Float>();
     static Deque<Float> avgPointsZ = new ArrayDeque<Float>();
-
+    
     static int state = 0;
     static int sign = 0;
 
