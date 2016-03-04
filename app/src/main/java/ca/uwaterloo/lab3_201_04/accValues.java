@@ -14,6 +14,11 @@ public class accValues {
     static int state = 0;
     static int sign = 0;
 
+    static int stepCount = 0;
+    static boolean stepCheckEnabled = true;
+    static float stepCountNorth = 0; // TODO: Use the stepCountNorth/East variables.
+    static float stepCountEast = 0;
+
     // Min, max, and reset amplitudes for the algorithm in m/s^2.
     static double minAmplitude = 0.5;
     static double maxAmplitude = 2.2;

@@ -1,5 +1,6 @@
 package ca.uwaterloo.lab3_201_04;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 //import android.util.Log;
@@ -18,10 +19,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     LineGraphView graph;
-    int stepCount = 0;
-    boolean stepCheckEnabled = true;
-    float stepCountNorth = 0; // TODO: Use the stepCountNorth/East variables.
-    float stepCountEast = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +59,24 @@ public class MainActivity extends AppCompatActivity {
         btnReset.setText("Clear Displacement");
         linLayout.addView(btnReset);
 
+        Button btnCalib = new Button(this);
+        btnCalib.setText("Calibration");
+        linLayout.addView(btnCalib);
+
+        btnCalib.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                accValues.stepCheckEnabled = false;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                OrientationDialogFragment nf = new OrientationDialogFragment();
+                nf.show(ft, "show");
+            }
+        });
+
         btnReset.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                stepCount = 0;
-                stepCountNorth = 0;
-                stepCountEast = 0;
+                accValues.stepCount = 0;
+                accValues.stepCountNorth = 0;
+                accValues.stepCountEast = 0;
             }
         });
     }
@@ -85,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
             }
             float[] avgValuesZ = {(float)0.0, (float)0.0, accValues.getAvgPointZ()};
             graph.addPoint(avgValuesZ);
-            if (accValues.sign == -2 && accValues.state == 1){
+            if (accValues.sign == -2 && accValues.state == 1 && accValues.stepCheckEnabled){
                 accValues.state = 0;
-                stepCount++;
+                accValues.stepCount++;
             }
             //Log.v("slope, steps", String.format("%f, %d", slope, stepCount));
             //output.setText(String.format("Steps: %d%nState: %d", stepCount, accValues.state));
-            output.setText(String.format("Steps: %d%n", stepCount));
+            output.setText(String.format("Steps: %d%n", accValues.stepCount));
         }
     }
 
