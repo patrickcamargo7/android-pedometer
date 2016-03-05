@@ -16,6 +16,7 @@ import android.view.View;
 import ca.uwaterloo.sensortoy.LineGraphView;
 
 import java.util.Arrays;
+import java.lang.Math;
 
 public class MainActivity extends AppCompatActivity {
     LineGraphView graph;
@@ -63,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
         btnCalib.setText("Calibration");
         linLayout.addView(btnCalib);
 
-        btnCalib.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        btnCalib.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 accValues.stepCheckEnabled = false;
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 OrientationDialogFragment nf = new OrientationDialogFragment();
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
             //Log.v("slope, steps", String.format("%f, %d", slope, stepCount));
             //output.setText(String.format("Steps: %d%nState: %d", stepCount, accValues.state));
+
             output.setText(String.format("Steps: %d%n", accValues.stepCount));
         }
     }
@@ -141,6 +143,12 @@ public class MainActivity extends AppCompatActivity {
             if (bearing < 0) {
                 bearing += 360;
             }
+
+            //accValues.stepCountNorth = Math.cos(orientation[0]) * accValues.stepCount;
+            //accValues.stepCountEast = Math.sin(orientation[0])* accValues.stepCount;
+            // TODO: Fix above code so that each step is translated into 1 step = x*stepCountNorth + y*stepCountEast.
+
+            output.setText(String.format("Bearing: %f degrees%nSteps North: %f steps%nSteps East: %f steps%n", bearing, accValues.stepCountNorth, accValues.stepCountEast));
         }
     }
 }
