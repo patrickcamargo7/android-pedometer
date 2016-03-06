@@ -13,9 +13,9 @@
 - [ ] Orientation: direction of steps
   - [x] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
   - [ ] Calculate the North and East components of each step taken *Tian*
-  - [x] Smooth the sensors - *Pierre* (orientation need not be smoothed)
+  - [ ] Smooth the sensors - *Pierre*
 - [ ] Map - *Tian*
-- [ ] Reset button - *Tian*
+- [x] Reset button - *Nelson*
 - [x] Calibration button/popup - disables steps - *Nelson*
 
 ### Implementation:
