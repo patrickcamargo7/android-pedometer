@@ -12,10 +12,11 @@
 - [ ] Pedometer: steps taken - *Pierre*
 - [ ] Orientation: direction of steps
   - [x] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
-  - [ ] Smooth the sensors - *Pierre*
+  - [ ] Calculate the North and East components of each step taken *Tian*
+  - [x] Smooth the sensors - *Pierre* (orientation need not be smoothed)
 - [ ] Map - *Tian*
 - [ ] Reset button - *Tian*
-- [ ] Calibration button/popup - disables steps - *Tian*
+- [x] Calibration button/popup - disables steps - *Nelson*
 
 ### Implementation:
 - Step detection code will be carried over from previous lab
