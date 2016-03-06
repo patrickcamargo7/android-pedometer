@@ -3,7 +3,6 @@ package ca.uwaterloo.lab3_201_04;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-//import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.hardware.Sensor;
@@ -20,7 +19,7 @@ import java.lang.Math;
 
 public class MainActivity extends AppCompatActivity {
     LineGraphView graph;
-
+    double bearingRadian = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +99,10 @@ public class MainActivity extends AppCompatActivity {
             if (accValues.sign == -2 && accValues.state == 1 && accValues.stepCheckEnabled){
                 accValues.state = 0;
                 accValues.stepCount++;
+                double tempBearing = bearingRadian; //Ensures sin and cos calculate from the same angle.
+                accValues.stepCountNorth += Math.cos(tempBearing);
+                accValues.stepCountEast += Math.sin(tempBearing);
             }
-            //Log.v("slope, steps", String.format("%f, %d", slope, stepCount));
-            //output.setText(String.format("Steps: %d%nState: %d", stepCount, accValues.state));
 
             output.setText(String.format("Steps: %d%n", accValues.stepCount));
         }
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         float [] gravity = new float[3];
         float [] magnetic = new float[3];
         float [] orientation = new float[3];
-        double bearing = 0;
+        double bearingDegree = 0;
 
         public OrientationSensorEventListener(TextView input){
             output = input;
@@ -137,18 +137,14 @@ public class MainActivity extends AppCompatActivity {
 
             SensorManager.getRotationMatrix(rotation, null, gravity, magnetic);
             SensorManager.getOrientation(rotation, orientation);
-            bearing = orientation[0];
-            bearing = Math.toDegrees(bearing);
+            bearingRadian = orientation[0];
+            bearingDegree = Math.toDegrees(bearingRadian);
 
-            if (bearing < 0) {
-                bearing += 360;
+            if(bearingDegree < 0) {
+                bearingDegree += 360;
             }
 
-            //accValues.stepCountNorth = Math.cos(orientation[0]) * accValues.stepCount;
-            //accValues.stepCountEast = Math.sin(orientation[0])* accValues.stepCount;
-            // TODO: Fix above code so that each step is translated into 1 step = x*stepCountNorth + y*stepCountEast.
-
-            output.setText(String.format("Bearing: %f degrees%nSteps North: %f steps%nSteps East: %f steps%n", bearing, accValues.stepCountNorth, accValues.stepCountEast));
+            output.setText(String.format("Bearing: %f degrees%nSteps North: %f steps%nSteps East: %f steps%n", bearingDegree, accValues.stepCountNorth, accValues.stepCountEast));
         }
     }
 }

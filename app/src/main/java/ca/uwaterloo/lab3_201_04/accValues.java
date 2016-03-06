@@ -16,7 +16,7 @@ public class accValues {
 
     static int stepCount = 0;
     static boolean stepCheckEnabled = true;
-    static double stepCountNorth = 0; // TODO: Use the stepCountNorth/East variables.
+    static double stepCountNorth = 0;
     static double stepCountEast = 0;
 
     // Min, max, and reset amplitudes for the algorithm in m/s^2.
