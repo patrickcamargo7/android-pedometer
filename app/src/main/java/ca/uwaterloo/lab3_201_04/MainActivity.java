@@ -136,10 +136,10 @@ public class MainActivity extends AppCompatActivity {
 
         public void onSensorChanged(SensorEvent se){
             if(se.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
-                accValues.addPoint(se.values[2]);
+                accValues.addPoint(se.values[2], 'p');
             }
             float[] avgValuesZ = {(float)0.0, (float)0.0, accValues.getAvgPointZ()};
-            graph.addPoint(avgValuesZ);
+            //graph.addPoint(avgValuesZ);
             if (accValues.sign == -2 && accValues.state == 1 && accValues.stepCheckEnabled){
                 accValues.state = 0;
                 accValues.stepCount++;
@@ -173,7 +173,10 @@ public class MainActivity extends AppCompatActivity {
             SensorManager.getOrientation(rotation, orientation);
             bearingRadian = orientation[0];
             bearingDegree = Math.toDegrees(bearingRadian);
-
+            accValues.addPoint((float)bearingDegree+180.0f, 'a');
+            float smoothedDegree = accValues.getAvgAngle();
+            float values[] = {(float)bearingDegree+180.0f, smoothedDegree, 0.0f};
+            graph.addPoint(values);
             if(bearingDegree < 0) {
                 bearingDegree += 360;
             }
