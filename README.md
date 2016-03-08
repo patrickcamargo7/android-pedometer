@@ -12,7 +12,7 @@
 - [ ] Pedometer: steps taken - *Pierre*
 - [ ] Orientation: direction of steps
   - [x] Get acc + mag sensor combo working together to produce an azimuth - *Tian*
-  - [ ] Calculate the North and East components of each step taken *Tian*
+  - [x] Calculate the North and East components of each step taken *Tian*
   - [ ] Smooth the sensors - *Pierre*
 - [ ] Map - *Tian*
 - [x] Reset button - *Nelson*
