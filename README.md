@@ -17,7 +17,7 @@
 - [x] Map - *Tian*
 - [x] Reset button - *Nelson*
 - [x] Calibration button/popup - disables steps - *Nelson*
-- [ ] (Optional) Pause step counting when a high angular velocity is detected to reduce false postives.
+- [ ] *(Optional)* Pause step counting when a high angular velocity is detected to reduce false postives.
 
 ### Implementation:
 - Step detection code will be carried over from previous lab
