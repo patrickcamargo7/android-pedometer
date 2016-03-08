@@ -1,6 +1,5 @@
 package ca.uwaterloo.lab3_201_04;
 
-import android.os.Environment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -61,15 +60,13 @@ public class MainActivity extends AppCompatActivity {
         SensorManager sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
         Sensor accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        Sensor gravSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Sensor magSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        Sensor rotSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 
         SensorEventListener stepListener = new StepSensorEventListener(stepText);
         SensorEventListener orientationListener = new OrientationSensorEventListener(oriText);
 
         sensorManager.registerListener(stepListener, accSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        sensorManager.registerListener(orientationListener, gravSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(orientationListener, magSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(orientationListener, rotSensor, SensorManager.SENSOR_DELAY_FASTEST);
 
         // Setting up the reset button for the graph.
         final Button btnReset = new Button(this);
@@ -157,9 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     class OrientationSensorEventListener implements SensorEventListener{
         TextView output;
-        float [] rotation = new float[9];
-        float [] gravity = new float[3];
-        float [] magnetic = new float[3];
+        float [] rotation = new float[16];
         float [] orientation = new float[3];
         double bearingDegree = 0;
 
@@ -170,19 +165,11 @@ public class MainActivity extends AppCompatActivity {
         public void onAccuracyChanged(Sensor s, int i){}
 
         public void onSensorChanged(SensorEvent se){
-            if(se.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-                // TODO: Add grav/acc smoothing.
-                gravity[0] = se.values[0];
-                gravity[1] = se.values[1];
-                gravity[2] = se.values[2];
-            } else if(se.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                // TODO: Add mag smoothing.
-                magnetic[0] = se.values[0];
-                magnetic[1] = se.values[1];
-                magnetic[2] = se.values[2];
+            if(se.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+                SensorManager.getRotationMatrixFromVector(rotation , se.values);
+                SensorManager.getOrientation(rotation, orientation);
             }
 
-            SensorManager.getRotationMatrix(rotation, null, gravity, magnetic);
             SensorManager.getOrientation(rotation, orientation);
             bearingRadian = orientation[0];
             bearingDegree = Math.toDegrees(bearingRadian);
@@ -191,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 bearingDegree += 360;
             }
 
-            output.setText(String.format("Bearing: %f degrees%nSteps North: %f steps%nSteps East: %f steps%n", bearingDegree, accValues.stepCountNorth, accValues.stepCountEast));
+            output.setText(String.format("Bearing: %.3f degrees%nSteps North: %.3f steps%nSteps East: %.3f steps%n", bearingDegree, accValues.stepCountNorth, accValues.stepCountEast));
         }
     }
 }
