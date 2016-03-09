@@ -139,13 +139,14 @@ public class MainActivity extends AppCompatActivity {
                 accValues.addPoint(se.values[2], 'p');
             }
             float[] avgValuesZ = {(float)0.0, (float)0.0, accValues.getAvgPointZ()};
-            //graph.addPoint(avgValuesZ);
+            graph.addPoint(avgValuesZ);
             if (accValues.sign == -2 && accValues.state == 1 && accValues.stepCheckEnabled){
                 accValues.state = 0;
                 accValues.stepCount++;
+                double avgAngle = Math.toRadians(accValues.getAvgAngle()+180.0f);
                 double tempBearing = bearingRadian; //Ensures sin and cos calculate from the same angle.
-                accValues.stepCountNorth += Math.cos(tempBearing);
-                accValues.stepCountEast += Math.sin(tempBearing);
+                accValues.stepCountNorth += Math.cos(avgAngle);
+                accValues.stepCountEast += Math.sin(avgAngle    );
             }
 
             output.setText(String.format("Steps: %d%n", accValues.stepCount));
@@ -176,12 +177,12 @@ public class MainActivity extends AppCompatActivity {
             accValues.addPoint((float)bearingDegree+180.0f, 'a');
             float smoothedDegree = accValues.getAvgAngle();
             float values[] = {(float)bearingDegree+180.0f, smoothedDegree, 0.0f};
-            graph.addPoint(values);
-            if(bearingDegree < 0) {
-                bearingDegree += 360;
-            }
+            //graph.addPoint(values);
+            //if(bearingDegree < 0) {
+            //    bearingDegree += 360;
+            //}
 
-            output.setText(String.format("Bearing: %.3f degrees%nSteps North: %.3f steps%nSteps East: %.3f steps%n", bearingDegree, accValues.stepCountNorth, accValues.stepCountEast));
+            output.setText(String.format("Bearing: %.3f degrees%nSteps North: %.3f steps%nSteps East: %.3f steps%n", bearingDegree+180.0f, accValues.stepCountNorth, accValues.stepCountEast));
         }
     }
 }

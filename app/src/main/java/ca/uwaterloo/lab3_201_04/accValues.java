@@ -31,14 +31,14 @@ public class accValues {
     // if state is 1, min amplitude is reached.
     // if state is 2, max amplitude is exceeded.
     final static int avgAmount = 30; //Average the last n samples from the sensor.
-    final static int angleAvgAmount = 5;
+    final static int angleAvgAmount = 35;
     static int amountAdded[] = {0};
     static int anglesAdded[] = {0};
 
     static void addPoint(float z, char option) {
         Deque<Float> t_list = new ArrayDeque<Float>();
         Deque<Float> t_avg = new ArrayDeque<Float>();
-        Deque<Float> t_angleDiff = new ArrayDeque<Float>();
+        Deque<Float> t_raw = new ArrayDeque<Float>();
         int t_avgAmount = 0;
         int t_added[] = {0};
 
@@ -49,10 +49,10 @@ public class accValues {
             t_avgAmount = avgAmount;
         }
         else if(option == 'a') { // for angles
-            t_list = t_angleDiff;
             t_avg = avgAngles;
             t_added = anglesAdded;
             t_avgAmount = angleAvgAmount;
+            t_list = angles;
         }
 
         t_list.addLast(z);
@@ -60,34 +60,38 @@ public class accValues {
 
         float total  = 0;
 
-        if(option == 'a'){
-            // generate differences
-            // compare the value of the angle to 0/360
-            float t_lastValue = t_list.peekLast();
-            if(t_lastValue < Math.abs(360.0 - t_lastValue)){
-                t_angleDiff.addLast(t_lastValue);
-            } else {
-                // add the 360's complement angle
-                t_angleDiff.addLast((float)-1.0 * (float)Math.abs(360.0 - t_lastValue));
-            }
-        }
-
         if (t_added[0] > t_avgAmount) {
             t_list.removeFirst();
             int loopindex = 0;
             //Log.d("new data smoothing set","-------------------");
 
             for (Iterator<Float> q = t_list.iterator(); q.hasNext(); loopindex++) {
-                float val = q.next();
-                double avgWeight = hammingWeight(loopindex, t_avgAmount);
+                float val;
+                double avgWeight;
+                if(option == 'p'){
+                     val = q.next();
+                }
+                else{
+                     val = q.next() - z;
+                    avgWeight = 1;
+                }
+                avgWeight = hammingWeight(loopindex, t_avgAmount);
+
                 total  += avgWeight * val;
                 //Log.d("val, weight, total ", String.format("%f, %f, %f", val, avgWeight, total ));
             }
 
-            float tempPoint  = total /(float) t_avgAmount;
-            t_avg.addLast(tempPoint );
+            float tempPoint  ;
             //Log.d("sample values", String.format("%f", tempPoint));
-            if(option == 'p') flipState(tempPoint );
+            if(option == 'p'){
+                tempPoint =  total /(float) t_avgAmount;
+                t_avg.addLast(tempPoint );
+                flipState(tempPoint );
+            } else {
+                tempPoint = total /(float) t_avgAmount;
+                tempPoint += z;
+                t_avg.addLast(tempPoint);
+            }
         }
     }
 
@@ -115,9 +119,7 @@ public class accValues {
 
     static float getAvgAngle(){
         if (avgAngles.size() != 0){
-            float f = avgAngles.peekLast();
-            if(f < 0) return 360.0f+f;
-            else return f;
+            return avgAngles.peekLast();
         }
         else return 0;
     }
