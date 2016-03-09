@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     PedometerMap map;
     MapLoader ml = new MapLoader();
 
+    // Using a global variable for the bearing because we need to access it from the orientation listener and the step counter.
     double bearingRadian = 0;
 
     @Override
@@ -35,24 +36,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         graph = new LineGraphView(getApplicationContext(), 1000, Arrays.asList("X", "Y", "Z"));
+
         mv = new Mapper(getApplicationContext(), 1440, 1000, 45, 45);
         registerForContextMenu(mv);
         map = ml.loadMap(getExternalFilesDir(null), "E2-3344.svg");
         mv.setMap(map);
-        registerForContextMenu(mv);
 
-        LinearLayout linLayout = (LinearLayout) findViewById(R.id.linearLayout);
+        // Frame layout for the map/graph and linear layout for the text and buttons underneath.
         FrameLayout frameLayout = (FrameLayout) findViewById(R.id.FrameLayout);
+        LinearLayout linLayout = (LinearLayout) findViewById(R.id.linearLayout);
+
 
         frameLayout.addView(graph);
         graph.setVisibility(View.INVISIBLE);
+
         frameLayout.addView(mv);
         mv.setVisibility(View.VISIBLE);
 
+        // Creating the TextView to display the steps taken.
         TextView stepText = new TextView(this);
         linLayout.addView(stepText);
         stepText.setVisibility(View.VISIBLE);
 
+        // Creating the TextView to display the bearing.
         TextView oriText = new TextView(this);
         linLayout.addView(oriText);
         oriText.setVisibility(View.VISIBLE);
@@ -66,9 +72,8 @@ public class MainActivity extends AppCompatActivity {
         SensorEventListener orientationListener = new OrientationSensorEventListener(oriText);
 
         sensorManager.registerListener(stepListener, accSensor, SensorManager.SENSOR_DELAY_FASTEST);
-        sensorManager.registerListener(orientationListener, rotSensor, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(orientationListener, rotSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
-        // Setting up the reset button for the graph.
         final Button btnReset = new Button(this);
         btnReset.setText("Clear Displacement");
         linLayout.addView(btnReset);
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         btnSwitch.setText("Switch to Graph");
         linLayout.addView(btnSwitch);
 
-
+        // Popup calibration instructions and pause step counting when calibration button is pressed.
         btnCalib.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 accValues.stepCheckEnabled = false;
@@ -91,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Set all step values to zero when clear displacement button is pressed.
         btnReset.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 accValues.stepCount = 0;
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Switch between map of room and graph of Z acceleration when switch button is pressed.
         btnSwitch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(graph.getVisibility() == View.VISIBLE) {
@@ -136,14 +143,18 @@ public class MainActivity extends AppCompatActivity {
 
         public void onSensorChanged(SensorEvent se){
             if(se.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION){
-                accValues.addPoint(se.values[2]);
+                accValues.addPoint(se.values[2]); // Give values to be averaged to the processing class.
             }
+
             float[] avgValuesZ = {(float)0.0, (float)0.0, accValues.getAvgPointZ()};
-            graph.addPoint(avgValuesZ);
+            graph.addPoint(avgValuesZ); // Graph the average values.
+
+            // Count a new step if certain algorithm conditions are met.
             if (accValues.sign == -2 && accValues.state == 1 && accValues.stepCheckEnabled){
                 accValues.state = 0;
                 accValues.stepCount++;
-                double tempBearing = bearingRadian; //Ensures sin and cos calculate from the same angle.
+                double tempBearing = bearingRadian; // Ensures sin and cos calculate from the same angle.
+                // North and East components of each step are the cos and sin of the bearing when the step is taken, respectively.
                 accValues.stepCountNorth += Math.cos(tempBearing);
                 accValues.stepCountEast += Math.sin(tempBearing);
             }
@@ -174,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             bearingRadian = orientation[0];
             bearingDegree = Math.toDegrees(bearingRadian);
 
+            // If the bearing is negative, add 360 to make sure the bearing is always positive.
             if(bearingDegree < 0) {
                 bearingDegree += 360;
             }
