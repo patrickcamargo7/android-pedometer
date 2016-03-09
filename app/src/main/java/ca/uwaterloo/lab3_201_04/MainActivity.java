@@ -153,7 +153,8 @@ public class MainActivity extends AppCompatActivity {
             if (accValues.sign == -2 && accValues.state == 1 && accValues.stepCheckEnabled){
                 accValues.state = 0;
                 accValues.stepCount++;
-                double tempBearing = bearingRadian; // Ensures sin and cos calculate from the same angle.
+                // Ensures sin and cos calculate from the same angle.
+                double tempBearing = bearingRadian;
                 // North and East components of each step are the cos and sin of the bearing when the step is taken, respectively.
                 accValues.stepCountNorth += Math.cos(tempBearing);
                 accValues.stepCountEast += Math.sin(tempBearing);
